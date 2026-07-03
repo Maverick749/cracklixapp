@@ -21,6 +21,7 @@ import {
   QrCode
 } from "lucide-react";
 import { useUser, useDoc, useFirestore } from "@/firebase";
+import { apiUrl } from "@/lib/api-base";
 import { submitManualPayment } from "@/app/actions/payment";
 import { doc } from "firebase/firestore";
 import Script from "next/script";
@@ -103,7 +104,7 @@ function CheckoutContent() {
     setVerifyingCoupon(true);
     setErrorMessage(null);
     try {
-       const res = await fetch('/api/coupon/apply', {
+       const res = await fetch(apiUrl('/api/coupon/apply'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ code: coupon.trim().toUpperCase(), userId: user?.uid })
@@ -138,7 +139,7 @@ function CheckoutContent() {
     setOnlineProcessing(true);
 
     try {
-      const res = await fetch("/api/razorpay/create-order", {
+      const res = await fetch(apiUrl("/api/razorpay/create-order"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -168,7 +169,7 @@ function CheckoutContent() {
         handler: async function (response: any) {
           setOnlineProcessing(true);
           try {
-            const verifyRes = await fetch("/api/razorpay/verify", {
+            const verifyRes = await fetch(apiUrl("/api/razorpay/verify"), {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ ...response, userId: user.uid, planId }),

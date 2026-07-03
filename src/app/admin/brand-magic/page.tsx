@@ -4,9 +4,9 @@ import React, { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Sparkles, Loader2, ImageIcon, Download, Share2, RefreshCw, ChevronLeft, Wand2 } from "lucide-react"
-import { transformLogo } from "@/ai/flows/transform-logo-flow"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
+import { apiUrl } from "@/lib/api-base"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 
@@ -38,8 +38,16 @@ export default function BrandMagicPage() {
     if (!preview) return
     setIsGenerating(true)
     try {
-      const response = await transformLogo({ logoDataUri: preview })
-      setResult(response.transformedImageDataUri)
+      const res = await fetch(apiUrl("/api/brand-magic"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ logoDataUri: preview }),
+      })
+      const data = await res.json()
+      if (!res.ok || !data?.success) {
+        throw new Error(data?.detail || data?.reason || "Transformation failed.")
+      }
+      setResult(data.transformedImageDataUri)
       toast({ title: "Magic Complete", description: "Your cinematic asset is ready." })
     } catch (err: unknown) {
       toast({ variant: "destructive", title: "Transformation Failed", description: (err as Error).message })
