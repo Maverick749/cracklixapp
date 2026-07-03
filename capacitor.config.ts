@@ -8,10 +8,13 @@ const config: CapacitorConfig = {
   appId: 'com.cracklix.app',
   appName: 'Cracklix',
   webDir: 'out',
+  // The web assets bundled in `out/` are served locally so the app opens and
+  // renders offline. We intentionally do NOT set `server.url` (which would make
+  // the shell a thin wrapper around the live site and fail without a network).
+  // Dynamic API calls are routed to the live backend via src/lib/api-base.ts.
   server: {
-    url: 'https://cracklix.vercel.app',
-    allowNavigation: ['*'],
     androidScheme: 'https',
+    allowNavigation: ['cracklix.vercel.app'],
     cleartext: true
   },
   plugins: {

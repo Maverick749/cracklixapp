@@ -2,6 +2,7 @@
 import AdEntryContent from './AdEntryContent';
 import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { apiUrl } from '@/lib/api-base';
 
 export default function AdEntryPage({ searchParams }: any) {
   const { id } = searchParams;
@@ -15,7 +16,7 @@ export default function AdEntryPage({ searchParams }: any) {
       try {
         // Only load from API on CLIENT-SIDE after build
         if (id) {
-          const adRes = await fetch('/api/firebase', {
+          const adRes = await fetch(apiUrl('/api/firebase'), {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -27,7 +28,7 @@ export default function AdEntryPage({ searchParams }: any) {
         }
 
         // Load exams after build
-        const examsRes = await fetch('/api/firebase', {
+        const examsRes = await fetch(apiUrl('/api/firebase'), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

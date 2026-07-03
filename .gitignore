@@ -11,6 +11,7 @@ serviceAccountKey.json
 .next/
 out/
 build/
+cracklix.apk
 
 # Dependencies
 node_modules/

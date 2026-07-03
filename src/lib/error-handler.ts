@@ -4,6 +4,8 @@
  * FIXED: Purged all Cashfree references and enhanced production logging.
  */
 
+import { apiUrl } from '@/lib/api-base';
+
 export interface AppError {
   code: string;
   message: string;
@@ -38,7 +40,7 @@ export class ErrorHandler {
     }
 
     try {
-      await fetch('/api/errors/log', {
+      await fetch(apiUrl('/api/errors/log'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(errorLog),

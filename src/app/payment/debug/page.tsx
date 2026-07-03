@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ShieldAlert, Terminal, Activity, Zap, Loader2, Globe } from "lucide-react"
 import { useUser } from "@/firebase"
+import { apiUrl } from "@/lib/api-base"
 
 /**
  * @fileOverview Institutional Billing Debug Center.
@@ -25,7 +26,7 @@ export default function BillingDebugPage() {
      setIsTesting(true);
      setError(null);
      try {
-        const res = await fetch('/api/cashfree/create-order', {
+        const res = await fetch(apiUrl('/api/cashfree/create-order'), {
            method: 'POST',
            headers: { 'Content-Type': 'application/json' },
            body: JSON.stringify({
