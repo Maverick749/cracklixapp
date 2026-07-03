@@ -6,10 +6,9 @@ set -e
 # The Android bundle is produced with `output: 'export'` (BUILD_TARGET=android).
 # Static export is incompatible with server-only code (API route handlers,
 # 'use server' actions and middleware), so we temporarily move those paths
-# aside for the export only and restore them right after. At runtime the APK
-# loads the live site via server.url in capacitor.config.ts, so this exported
-# bundle is only a placeholder required by `npx cap sync`. This mirrors the
-# stash logic in .github/workflows/android-apk.yml so local builds match CI.
+# aside for the export only and restore them right after. The exported bundle
+# is what the APK ships and serves locally (offline). This mirrors the stash
+# logic in .github/workflows/android-apk.yml so local builds match CI.
 stash_server_code() {
   mkdir -p .ci-stash
   [ -d src/app/api ] && mv src/app/api .ci-stash/api || true
@@ -44,8 +43,10 @@ cd android
 ./gradlew clean assembleDebug
 
 if [ $? -eq 0 ]; then
+    cd ..
+    cp android/app/build/outputs/apk/debug/app-debug.apk cracklix.apk
     echo "✅ Debug APK built successfully!"
-    echo "📍 Location: android/app/build/outputs/apk/debug/app-debug.apk"
+    echo "📍 Location: cracklix.apk (also android/app/build/outputs/apk/debug/app-debug.apk)"
 else
     echo "❌ Build failed"
     exit 1
